@@ -1,13 +1,16 @@
 import React from 'react';
 import { toast } from "react-toastify"
+import { authApi } from '../api/authApi';
+import { useForm } from 'react-hook-form';
 
 export default function Register() {
-    const hdlSubmit = async data => {
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const hdlSubmit = async d => {
+        console.log(JSON.stringify(d))
         try {
             await new Promise(resolve => setTimeout(resolve, 1000))
-            const resp = await authApi.post('/register', data)
+            const resp = await authApi.post('/register', d)
             toast.success(resp.data?.message)
-            document.getElementById("register-form").close()
             reset()
         } catch (err) {
             console.log(err)
@@ -26,51 +29,63 @@ export default function Register() {
                         <span>🎓</span> สมัครสมาชิก
                     </div>
                     <p className="text-gray-600 mb-6">เริ่มต้นการเรียนรู้กับเราวันนี้</p>
-                    <form className="flex flex-col gap-4" onSubmit={hdlSubmit}>
+                    <form className="flex flex-col gap-4" onSubmit={handleSubmit(hdlSubmit)}>
                         {/* 1. ชื่อและนามสกุล */}
                         <div className="flex gap-4">
                             <input
-                                type="text"
-                                name="firstName" // เพิ่ม name
+                                {...register("firstName", { required: true })}
                                 placeholder="ชื่อ"
                                 className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                                required // เพิ่ม Validation
                             />
                             <input
-                                type="text"
-                                name="lastName" // เพิ่ม name
+                                {...register("lastName", { required: true })}
                                 placeholder="นามสกุล"
                                 className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                                required // เพิ่ม Validation
                             />
                         </div>
 
                         {/* 2. อีเมล */}
                         <input
-                            type="email"
-                            name="email" // เพิ่ม name
+                            {...register("email", { required: true })}
                             placeholder="อีเมล"
                             className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                            required
                         />
 
                         {/* 3. รหัสผ่าน */}
                         <input
                             type="password"
-                            name="password" // เพิ่ม name
+                            {...register("password", { required: true })}
                             placeholder="รหัสผ่าน"
                             className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                            required
-                            minLength="8" // เพิ่มเงื่อนไขรหัสผ่าน
                         />
 
                         {/* 4. ยืนยันรหัสผ่าน */}
                         <input
                             type="password"
-                            name="confirmPassword" // เพิ่ม name
+                            {...register("confirmPassword", { required: true })}
                             placeholder="ยืนยันรหัสผ่าน"
                             className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                            required
+                        />
+
+                        <input
+                            type="text"
+                            {...register("phone", { required: true })}
+                            placeholder="เบอร์โทร"
+                            className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
+                        />
+
+                        <input
+                            type="text"
+                            {...register("contactInfo", { required: true })}
+                            placeholder="Contact Info"
+                            className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
+                        />
+
+                        <input
+                            type="text"
+                            {...register("bio", { required: true })}
+                            placeholder="Bio"
+                            className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
                         />
 
                         {/* 5. ปุ่ม Submit */}

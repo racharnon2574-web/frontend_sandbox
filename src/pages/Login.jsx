@@ -2,6 +2,7 @@
 import React from 'react';
 
 export default function Login() {
+
     return (
         <div className="min-h-screen bg-green-50 flex items-center justify-center p-6">
 
@@ -59,7 +60,7 @@ export default function Login() {
                         </button>
                         <p className="text-center text-gray-600 mt-2">
                             ยังไม่มีบัญชี?{' '}
-                            <a href="#" className="text-green-600 hover:underline">
+                            <a href="/register" className="text-green-600 hover:underline">
                                 สมัครสมาชิก
                             </a>
                         </p>
