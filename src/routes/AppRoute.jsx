@@ -1,11 +1,40 @@
-import React from 'react'
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router'
 
-function AppRoute() {
+// ถ้ามันช้าค่อยมาทำ lazy 
+import Home from '../pages/Home'
+import AddLesson from '../pages/AddLesson'
+import EditLesson from '../pages/EditLesson'
+import Lesson from '../pages/Lesson'
+import Login from '../pages/Login'
+import Register from '../pages/Register'
+
+// ถ้าไม่มี user ให้มาใช้ part นี้
+const guestRouter = createBrowserRouter([
+    { path: '/', element: <Login /> },
+    { path: '/Register', element: <Register /> },
+    { path: '*', element: <Navigate to='/' /> },
+])
+// ถ้ามี user ให้มาใช้ partนี้
+const userRouter = createBrowserRouter([{
+    path: "/", element: <>
+        <p>Header</p>
+        <Outlet />
+    </>, children: [
+        { path: "", element: <Home /> },
+        { path: "add-lesson", element: <AddLesson /> },
+        { path: "edit-lesson", element: <EditLesson /> },
+        { path: "lesson", element: <Lesson /> }
+    ]
+}])
+
+function AppRouter() {
+    // กำหนดให้ไม่มี user
+    const user = null
+    // ตรวจสอบว่ามี user ไหม
+    const finalRouter = user ? userRouter : guestRouter
     return (
-        <div>
-            tes03
-        </div>
+        <RouterProvider router={finalRouter} />
     )
 }
 
-export default AppRoute
+export default AppRouter
