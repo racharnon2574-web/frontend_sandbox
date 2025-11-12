@@ -1,19 +1,24 @@
 import React from 'react';
+
 import { toast } from "react-toastify"
 import { authApi } from '../api/authApi';
 import { useForm } from 'react-hook-form';
+import { registerSchema } from '../validations/schema.user';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function Register() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: zodResolver(registerSchema),
+    });
+
     const hdlSubmit = async d => {
-        console.log(JSON.stringify(d))
         try {
+            console.log(d, "data")
             await new Promise(resolve => setTimeout(resolve, 1000))
             const resp = await authApi.post('/register', d)
             toast.success(resp.data?.message)
             reset()
         } catch (err) {
-            console.log(err)
             const errMsg = err.response?.data?.message || err.message
             toast.error(errMsg)
         }
@@ -32,47 +37,64 @@ export default function Register() {
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit(hdlSubmit)}>
                         {/* 1. ชื่อและนามสกุล */}
                         <div className="flex gap-4">
-                            <input
-                                {...register("firstName", { required: true })}
-                                placeholder="ชื่อ"
-                                className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                            />
-                            <input
-                                {...register("lastName", { required: true })}
-                                placeholder="นามสกุล"
-                                className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                            />
+                            <div className='w-full'>
+                                <input
+                                    {...register("firstName", { required: true })}
+                                    placeholder="ชื่อ"
+                                    className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
+                                />
+                                <p className="text-sm text-error text-red-500 ">{errors.firstName?.message}</p>
+                            </div>
+                            <div className='w-full'>
+                                <input
+                                    {...register("lastName", { required: true })}
+                                    placeholder="นามสกุล"
+                                    className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
+                                />
+                                <p className="text-sm text-error text-red-500">{errors.lastName?.message}</p>
+                            </div>
                         </div>
 
                         {/* 2. อีเมล */}
-                        <input
-                            {...register("email", { required: true })}
-                            placeholder="อีเมล"
-                            className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                        />
+                        <div>
+                            <input
+                                {...register("email", { required: true })}
+                                placeholder="อีเมล"
+                                className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
+                            />
+                            <p className="text-sm text-error text-red-500">{errors.email?.message}</p>
+                        </div>
 
                         {/* 3. รหัสผ่าน */}
-                        <input
-                            type="password"
-                            {...register("password", { required: true })}
-                            placeholder="รหัสผ่าน"
-                            className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                        />
+                        <div>
+                            <input
+                                type="password"
+                                {...register("password", { required: true })}
+                                placeholder="รหัสผ่าน"
+                                className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
+                            />
+                            <p className="text-sm text-error text-red-500">{errors.password?.message}</p>
+                        </div>
 
                         {/* 4. ยืนยันรหัสผ่าน */}
-                        <input
-                            type="password"
-                            {...register("confirmPassword", { required: true })}
-                            placeholder="ยืนยันรหัสผ่าน"
-                            className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                        />
-
-                        <input
-                            type="text"
-                            {...register("phone", { required: true })}
-                            placeholder="เบอร์โทร"
-                            className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
-                        />
+                        <div>
+                            <input
+                                type="password"
+                                {...register("confirmPassword", { required: true })}
+                                placeholder="ยืนยันรหัสผ่าน"
+                                className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
+                            />
+                            <p className="text-sm text-error text-red-500">{errors.confirmPassword?.message}</p>
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                {...register("phone", { required: true })}
+                                placeholder="เบอร์โทร"
+                                className="border border-gray-300 rounded-lg w-full p-3 focus:ring-2 focus:ring-green-400"
+                            />
+                            <p className="text-sm text-error text-red-500">{errors.phone?.message}</p>
+                        </div>
 
                         <input
                             type="text"
@@ -99,7 +121,7 @@ export default function Register() {
 
                         {/* 6. ลิงก์เข้าสู่ระบบ */}
                         <p className="text-center text-gray-600 mt-2">
-                            มีบัญชีอยู่แล้ว? <a href="#" className="text-green-600 hover:underline">เข้าสู่ระบบ</a>
+                            มีบัญชีอยู่แล้ว? <a href="login" className="text-green-600 hover:underline">เข้าสู่ระบบ</a>
                         </p>
                     </form>
                 </div>

@@ -5,8 +5,10 @@ import Home from '../pages/Home'
 import AddLesson from '../pages/AddLesson'
 import EditLesson from '../pages/EditLesson'
 import Lesson from '../pages/Lesson'
-import Login from '../pages/Login'
-import Register from '../pages/Register'
+import Login from '../pages/LoginPage'
+import Register from '../pages/RegisterPage'
+import axios from 'axios'
+import useUserLogin from '../Utils/login'
 
 // ถ้าไม่มี user ให้มาใช้ part นี้
 const guestRouter = createBrowserRouter([
@@ -29,7 +31,7 @@ const userRouter = createBrowserRouter([{
 
 function AppRouter() {
     // กำหนดให้ไม่มี user
-    const user = null
+    const user = useUserLogin((state) => state.user)
     // ตรวจสอบว่ามี user ไหม
     const finalRouter = user ? userRouter : guestRouter
     return (
