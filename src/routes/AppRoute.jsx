@@ -8,7 +8,8 @@ import Lesson from '../pages/Lesson'
 import Login from '../pages/LoginPage'
 import Register from '../pages/RegisterPage'
 import axios from 'axios'
-import useUserLogin from '../Utils/login'
+import useUserLogin from '../Utils/login.store'
+import Header from '../pages/Header'
 
 // ถ้าไม่มี user ให้มาใช้ part นี้
 const guestRouter = createBrowserRouter([
@@ -18,11 +19,9 @@ const guestRouter = createBrowserRouter([
 ])
 // ถ้ามี user ให้มาใช้ partนี้
 const userRouter = createBrowserRouter([{
-    path: "/", element: <>
-        <p>Header</p>
-        <Outlet />
-    </>, children: [
-        { path: "", element: <Home /> },
+    path: "/", element: <Header />,
+    children: [
+        { index: true, element: <Home /> },
         { path: "add-lesson", element: <AddLesson /> },
         { path: "edit-lesson", element: <EditLesson /> },
         { path: "lesson", element: <Lesson /> }

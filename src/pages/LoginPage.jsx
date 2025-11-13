@@ -4,11 +4,11 @@ import { loginSchema } from '../validations/schema.user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { authApi } from '../api/authApi';
-import useUserLogin from '../Utils/login';
+import useUserLogin from '../Utils/login.store';
 
 
 export default function Login() {
-    const { login } = useUserLogin.getState()
+    const login = useUserLogin(state => state.login)
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(loginSchema),
     });
@@ -20,7 +20,6 @@ export default function Login() {
             const resp = await authApi.post('/login', d)
             toast.success(resp.data?.message)
             login(d)
-
             // 
         } catch (err) {
             const errMsg = err.response?.data?.message || err.message

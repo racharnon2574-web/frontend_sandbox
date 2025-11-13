@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 export default function Register() {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(registerSchema),
+        mode: "onBlur"
     });
 
     const hdlSubmit = async d => {
